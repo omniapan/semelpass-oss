@@ -180,7 +180,7 @@ semelpass-oss is built with security as the primary constraint, not an afterthou
 - Rate limiting on all authentication endpoints (silent 202 — never reveals state)
 - Secure cookies: `HttpOnly`, `Secure`, `SameSite=Lax`
 - Content Security Policy, COEP, COOP headers enforced
-- ZAP baseline scan: **59 PASS / 0 FAIL / 8 WARN**
+- ZAP baseline scan: **62 PASS / 0 FAIL / 4 WARN**
 
 See [SECURITY.md](SECURITY.md) for vulnerability disclosure and our security policy.
 

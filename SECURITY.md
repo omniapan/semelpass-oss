@@ -47,7 +47,7 @@ Out of scope:
 ## Security baseline
 
 semelpass-oss ships with:
-- OWASP ZAP passive scan: 59 PASS / 0 FAIL
+- OWASP ZAP passive scan: 62 PASS / 0 FAIL
 - HSTS, CSP, COEP, COOP, X-Frame-Options headers
 - Redis-backed rate limiting (silent 202)
 - Append-only audit log
