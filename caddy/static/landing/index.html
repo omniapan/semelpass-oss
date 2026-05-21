@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>semelpass — Passwordless OTP Authentication</title>
+<meta name="description" content="Add passwordless OTP authentication to any application in minutes. No passwords. No friction. Just email and a one-time code.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --cream:#FDF6EC;--surface:#FAF0E2;--surface2:#F5E8D8;
+  --red:#C41E3A;--red-lt:#F5E8EB;
+  --text:#2C1810;--muted:#7A5C52;--border:#E8D8C8;
+  --green:#2D6A4F;--green-lt:#E8F5EF;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream);color:var(--text);line-height:1.7;font-size:16px}
+
+/* ── Nav ── */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(253,246,236,0.92);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--border);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.nav-brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.nav-brand span{font-family:'Playfair Display',serif;font-size:18px;font-style:italic;font-weight:600;color:var(--text)}
+.nav-links{display:flex;align-items:center;gap:24px}
+.nav-links a{font-size:14px;color:var(--muted);text-decoration:none;font-weight:400}
+.nav-links a:hover{color:var(--red)}
+.nav-cta{
+  background:var(--red);color:#fff;text-decoration:none;
+  padding:8px 20px;border-radius:6px;font-size:14px;font-weight:500;
+}
+.nav-cta:hover{opacity:0.9}
+
+/* ── Hero ── */
+.hero{
+  text-align:center;
+  padding:100px 40px 80px;
+  max-width:800px;margin:0 auto;
+}
+.hero-eyebrow{
+  display:inline-block;
+  background:var(--red-lt);color:var(--red);
+  border:1px solid #E8C0C8;border-radius:20px;
+  padding:5px 16px;font-size:12px;font-weight:500;
+  letter-spacing:0.5px;margin-bottom:28px;
+  text-transform:uppercase;
+}
+.hero h1{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(38px,6vw,62px);
+  font-weight:400;line-height:1.15;
+  margin-bottom:20px;
+}
+.hero h1 em{font-style:italic;color:var(--red)}
+.hero p{
+  font-size:18px;color:var(--muted);font-weight:300;
+  max-width:520px;margin:0 auto 40px;line-height:1.7;
+}
+.hero-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn-primary{
+  display:inline-block;background:var(--red);color:#fff;
+  text-decoration:none;padding:14px 32px;border-radius:8px;
+  font-size:15px;font-weight:500;transition:opacity 0.15s;
+}
+.btn-primary:hover{opacity:0.9}
+.btn-outline{
+  display:inline-block;background:none;color:var(--text);
+  text-decoration:none;padding:14px 32px;border-radius:8px;
+  font-size:15px;font-weight:400;border:1px solid var(--border);
+  transition:border-color 0.15s;
+}
+.btn-outline:hover{border-color:var(--red);color:var(--red)}
+
+/* ── Trust bar ── */
+.trust-bar{
+  text-align:center;padding:20px 40px 60px;
+}
+.trust-bar p{font-size:12px;color:var(--muted);font-weight:300;letter-spacing:0.3px}
+
+/* ── How it works ── */
+.how{
+  background:var(--surface);
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+  padding:80px 40px;
+}
+.how-inner{max-width:960px;margin:0 auto}
+.section-label{
+  font-size:11px;font-weight:600;color:var(--red);
+  letter-spacing:1.2px;text-transform:uppercase;
+  margin-bottom:12px;
+}
+.how h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(26px,4vw,36px);font-weight:400;
+  margin-bottom:48px;
+}
+.how h2 em{font-style:italic}
+.steps-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:32px;
+}
+.step-card{position:relative}
+.step-num{
+  width:36px;height:36px;border-radius:50%;
+  background:var(--red);color:#fff;
+  font-family:'Playfair Display',serif;font-size:16px;font-weight:600;
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:16px;
+}
+.step-card h3{
+  font-family:'Playfair Display',serif;
+  font-size:17px;font-weight:600;margin-bottom:8px;
+}
+.step-card p{font-size:14px;color:var(--muted);font-weight:300;line-height:1.65}
+
+/* ── Why semelpass ── */
+.why{padding:80px 40px}
+.why-inner{max-width:960px;margin:0 auto}
+.why h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(26px,4vw,36px);font-weight:400;
+  margin-bottom:48px;
+}
+.why h2 em{font-style:italic}
+.why-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:24px;
+}
+.why-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:12px;padding:28px 24px;
+}
+.why-icon{
+  width:40px;height:40px;border-radius:10px;
+  background:var(--red-lt);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:16px;
+}
+.why-card h3{font-size:15px;font-weight:500;margin-bottom:8px}
+.why-card p{font-size:13px;color:var(--muted);font-weight:300;line-height:1.65}
+
+/* ── Demo CTA band ── */
+.demo-band{
+  background:var(--red);color:#fff;
+  padding:64px 40px;text-align:center;
+}
+.demo-band h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(24px,4vw,36px);font-weight:400;
+  font-style:italic;margin-bottom:12px;
+}
+.demo-band p{font-size:15px;opacity:0.8;font-weight:300;margin-bottom:32px}
+.btn-white{
+  display:inline-block;background:#fff;color:var(--red);
+  text-decoration:none;padding:14px 32px;border-radius:8px;
+  font-size:15px;font-weight:500;transition:opacity 0.15s;
+}
+.btn-white:hover{opacity:0.9}
+
+/* ── Request form ── */
+.request{padding:80px 40px}
+.request-inner{max-width:600px;margin:0 auto}
+.request h2{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(26px,4vw,36px);font-weight:400;
+  margin-bottom:8px;
+}
+.request h2 em{font-style:italic}
+.request .sub{font-size:15px;color:var(--muted);font-weight:300;margin-bottom:40px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{margin-bottom:20px}
+.field label{
+  display:block;font-size:12px;font-weight:600;
+  color:var(--muted);letter-spacing:0.8px;
+  text-transform:uppercase;margin-bottom:6px;
+}
+.field input,.field textarea,.field select{
+  width:100%;padding:12px 14px;
+  border:1px solid var(--border);border-radius:8px;
+  background:var(--surface);color:var(--text);
+  font-family:'DM Sans',system-ui,sans-serif;font-size:15px;
+  outline:none;transition:border-color 0.15s;
+  resize:vertical;
+}
+.field input:focus,.field textarea:focus{border-color:var(--red)}
+.field textarea{min-height:100px}
+.submit-btn{
+  width:100%;padding:14px;
+  background:var(--red);color:#fff;border:none;border-radius:8px;
+  font-family:'Playfair Display',serif;font-style:italic;
+  font-size:17px;cursor:pointer;transition:opacity 0.15s;
+  margin-top:4px;
+}
+.submit-btn:hover{opacity:0.9}
+.submit-btn:disabled{opacity:0.5;cursor:default}
+.form-status{
+  display:none;text-align:center;padding:32px;
+  background:var(--green-lt);border:1px solid #B8DFC9;
+  border-radius:12px;margin-top:24px;
+}
+.form-status.error{background:var(--red-lt);border-color:#E8C0C8}
+.form-status h3{
+  font-family:'Playfair Display',serif;font-size:20px;
+  font-weight:600;margin-bottom:8px;color:var(--green);
+}
+.form-status.error h3{color:var(--red)}
+.form-status p{font-size:14px;color:var(--muted)}
+
+/* ── Footer ── */
+footer{
+  background:var(--surface);border-top:1px solid var(--border);
+  padding:40px;text-align:center;
+}
+footer p{font-size:12px;color:var(--muted);font-weight:300}
+footer a{color:var(--red);text-decoration:none}
+
+@media(max-width:600px){
+  nav{padding:12px 20px}
+  .hero{padding:60px 20px 48px}
+  .how,.why,.request{padding:60px 20px}
+  .form-row{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .demo-band{padding:48px 20px}
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <a class="nav-brand" href="/">
+    <img src="/color-logo.png" alt="semelpass" style="width:40px;height:40px;mix-blend-mode:multiply">
+    <span>semelpass™</span>
+  </a>
+  <div class="nav-links">
+    <a href="#how-it-works">How it works</a>
+    <a href="#request">Request access</a>
+    <a href="/portal/login">Portal</a>
+  </div>
+  <a class="nav-cta" href="https://demo.semelpass.com/gate/">Try Live Demo →</a>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-eyebrow">Passwordless Authentication</div>
+  <h1>No passwords.<br><em>Just a one-time code.</em></h1>
+  <p>Add frictionless OTP authentication to any application in minutes. Your users sign in with their email — nothing to remember, nothing to steal.</p>
+  <div class="hero-actions">
+    <a class="btn-primary" href="https://demo.semelpass.com/gate/">Try Live Demo →</a>
+    <a class="btn-outline" href="#request">Request Access</a>
+  </div>
+</section>
+
+<div class="trust-bar">
+  <p>Protected by semelpass · Bank-grade verification · 10-minute codes · Single-use codes · Zero password storage</p>
+</div>
+
+<!-- How it works -->
+<section class="how" id="how-it-works">
+  <div class="how-inner">
+    <div class="section-label">How it works</div>
+    <h2>From email to authenticated<br><em>in under two minutes.</em></h2>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h3>Enter your email</h3>
+        <p>No account needed. No password required. Just an email address — your inbox is your identity.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h3>Receive a code</h3>
+        <p>A secure 6-digit code arrives in seconds. Valid for 10 minutes. Single-use. Impossible to reuse.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <h3>You're in</h3>
+        <p>Enter the code and you're authenticated. No password database. No reset flows. No credential stuffing risk.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">4</div>
+        <h3>Integrate in minutes</h3>
+        <p>Drop-in integration. Works with any backend. Your users never notice the switch.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Why semelpass -->
+<section class="why">
+  <div class="why-inner">
+    <div class="section-label">Why semelpass</div>
+    <h2>Built for security.<br><em>Designed for simplicity.</em></h2>
+    <div class="why-grid">
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C41E3A" stroke-width="1.5" stroke-linecap="round">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <h3>No password database</h3>
+        <p>Nothing to breach. Credentials that don't exist can't be stolen, leaked, or phished.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C41E3A" stroke-width="1.5" stroke-linecap="round">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M12 6v6l4 2"/>
+          </svg>
+        </div>
+        <h3>10-minute codes</h3>
+        <p>Codes expire automatically. Codes are deleted the moment they are used — replay attacks are impossible.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C41E3A" stroke-width="1.5" stroke-linecap="round">
+            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+          </svg>
+        </div>
+        <h3>Simple integration</h3>
+        <p>Full documentation in your portal. Most teams are live the same day.</p>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#C41E3A" stroke-width="1.5" stroke-linecap="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <h3>Zero friction for users</h3>
+        <p>No passwords to remember. No reset emails. No 2FA apps. Just inbox → code → done.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Demo CTA band -->
+<section class="demo-band">
+  <h2>See it working right now.</h2>
+  <p>Live demo — any email, no account required. Authenticated in under two minutes.</p>
+  <a class="btn-white" href="https://demo.semelpass.com/gate/">Try Live Demo →</a>
+</section>
+
+<!-- Request form -->
+<section class="request" id="request">
+  <div class="request-inner">
+    <div class="section-label">Get started</div>
+    <h2>Request <em>access.</em></h2>
+    <p class="sub">Tell us about your use case. We'll provision your tenant and send you credentials to the portal — usually within one business day.</p>
+
+    <form id="requestForm">
+      <div class="form-row">
+        <div class="field">
+          <label for="name">Your name *</label>
+          <input type="text" id="name" name="name" placeholder="Jane Smith" required>
+        </div>
+        <div class="field">
+          <label for="email">Email address *</label>
+          <input type="email" id="email" name="email" placeholder="jane@company.com" required>
+        </div>
+      </div>
+      <div class="field">
+        <label for="company">Company</label>
+        <input type="text" id="company" name="company" placeholder="Acme Corp">
+      </div>
+      <div class="field">
+        <label for="use_case">What are you building?</label>
+        <textarea id="use_case" name="use_case" placeholder="Briefly describe your application and how you plan to use semelpass..."></textarea>
+      </div>
+      <button type="submit" class="submit-btn" id="submitBtn">Request Access →</button>
+    </form>
+
+    <div class="form-status" id="formSuccess">
+      <h3>Request received.</h3>
+      <p>We'll review your request and send credentials to your email — usually within one business day.</p>
+    </div>
+    <div class="form-status error" id="formError">
+      <h3>Something went wrong.</h3>
+      <p>Please try again or email us directly.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <p>
+    <a href="/">semelpass™</a> by
+    <a href="https://omniapan.com" target="_blank" rel="noopener">Omniapan AI Inc.</a>
+    &nbsp;·&nbsp;
+    <a href="/portal/login">Tenant Portal</a>
+    &nbsp;·&nbsp;
+    © 2026 All rights reserved
+  </p>
+</footer>
+
+<script src="/landing.js"></script>
+</body>
+</html>

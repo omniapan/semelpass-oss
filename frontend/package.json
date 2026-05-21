@@ -1,0 +1,21 @@
+{
+  "name": "semelpass-frontend",
+  "version": "26.05.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build:admin":  "vite build --config vite.admin.config.js",
+    "build:portal": "vite build --config vite.portal.config.js",
+    "build:demo":   "vite build --config vite.demo.config.js",
+    "build":        "npm run build:admin && npm run build:portal && npm run build:demo"
+  },
+  "dependencies": {
+    "react":            "^18.3.1",
+    "react-dom":        "^18.3.1",
+    "react-router-dom": "^6.26.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.1",
+    "vite":                 "^5.4.0"
+  }
+}

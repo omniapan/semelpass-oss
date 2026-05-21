@@ -1,0 +1,110 @@
+# semelpass-OSS — Caddyfile
+# Phase 1: localhost only — no TLS, no public domain
+# Phase 4: swap :80 for otp.semelpass.com, TLS auto
+
+# ── Juice Shop demo gate — Phase 3 ───────────────────────────────────
+demo.semelpass.com:80 {
+    header {
+        Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+        X-Frame-Options "DENY"
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "no-referrer"
+        Content-Security-Policy "default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; object-src 'none';"
+        Permissions-Policy "geolocation=(), microphone=(), camera=()"
+        Cross-Origin-Embedder-Policy "require-corp"
+        Cross-Origin-Opener-Policy "same-origin"
+        Cache-Control "no-store"
+        -X-Powered-By
+        -Server
+    }
+
+    @gateredirect path /gate
+    redir @gateredirect /gate/ 308
+
+    # Gate API — strip /gate/api, rewrite to /demo/gate, proxy to backend
+    # /gate/api/send   → /demo/gate/send
+    # /gate/api/verify → /demo/gate/verify
+    handle_path /gate/api/* {
+        rewrite * /demo/gate{path}
+        reverse_proxy semelpass-backend:8000
+    }
+
+    # Gate SPA — React OTP screen
+    handle_path /gate/* {
+        root * /srv/static/demo
+        try_files {path} /index.html
+        file_server
+    }
+
+    # Juice Shop — everything else
+    handle /* {
+        reverse_proxy semelpass-juiceshop:3000
+    }
+}
+
+:80 {
+    # ── Security headers ─────────────────────────────────────────────────────
+    header {
+        Strict-Transport-Security "max-age=63072000; includeSubDomains; preload"
+        X-Frame-Options "DENY"
+        X-Content-Type-Options "nosniff"
+        Referrer-Policy "no-referrer"
+        Content-Security-Policy "default-src 'self'; script-src 'self' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; frame-ancestors 'none'; form-action 'self'; base-uri 'self'; object-src 'none';"
+        Permissions-Policy "geolocation=(), microphone=(), camera=()"
+        Cross-Origin-Embedder-Policy "require-corp"
+        Cross-Origin-Opener-Policy "same-origin"
+        Cache-Control "no-store"
+        -X-Powered-By
+        -Server
+    }
+    # ── Health + auth engine + public demo form ───────────────────────────────
+    handle /health {
+        reverse_proxy semelpass-backend:8000
+    }
+    handle /auth/* {
+        reverse_proxy semelpass-backend:8000
+    }
+    handle /demo/* {
+        reverse_proxy semelpass-backend:8000
+    }
+    # ── Trailing-slash redirects ─────────────────────────────────────────────
+    @adminbare path /admin
+    redir @adminbare /admin/ 308
+    @portalbare path /portal
+    redir @portalbare /portal/ 308
+    # ── Admin API — handle_path strips /admin/api, rewrite prepends /admin ────
+    # /admin/api/tenants → strips to /tenants → rewrite to /admin/tenants → backend
+    handle_path /admin/api/* {
+        rewrite * /admin{path}
+        reverse_proxy semelpass-backend:8000
+    }
+    # ── Admin GUI — handle_path strips /admin, serves from /srv/static/admin ──
+    handle_path /admin/* {
+        root * /srv/static/admin
+        try_files {path} /index.html
+        file_server
+    }
+    # ── Portal API — handle_path strips /portal/api, rewrite prepends /portal ─
+    handle_path /portal/api/* {
+        rewrite * /portal{path}
+        reverse_proxy semelpass-backend:8000
+    }
+    # ── Tenant Portal GUI — Block 4 ───────────────────────────────────────────
+    handle_path /portal/* {
+        root * /srv/static/portal
+        try_files {path} /index.html
+        file_server
+    }
+    # ── Pricing page ─────────────────────────────────────────────────────────────
+    handle /pricing {
+        root * /srv/static/landing
+        rewrite * /pricing/index.html
+        file_server
+    }
+    # ── Landing ───────────────────────────────────────────────────────────────
+    handle /* {
+        root * /srv/static/landing
+        try_files {path} /index.html
+        file_server
+    }
+}

@@ -1,0 +1,70 @@
+# =============================================================================
+# semelpass-oss — .gitignore
+# Rule 71: Never commit secrets, .env files, or keys
+# =============================================================================
+
+# ── Secrets — NEVER commit ───────────────────────────────────────────────────
+secrets/
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+*.crt
+*.csr
+
+# ── Docker compose backups ────────────────────────────────────────────────────
+docker-compose.yml.bak.*
+docker-compose.override.yml
+
+# ── Caddy backups ─────────────────────────────────────────────────────────────
+caddy/Caddyfile.bak.*
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+venv/
+.venv/
+
+# ── Node / Frontend ───────────────────────────────────────────────────────────
+node_modules/
+frontend/dist/
+frontend/.vite/
+
+# ── Built static assets (rebuilt on deploy via frontend-builder) ──────────────
+caddy/static/admin/
+caddy/static/portal/
+caddy/static/demo/
+
+# ── ZAP security reports (contain server fingerprint data) ────────────────────
+zap-reports/
+
+# ── Backup files ──────────────────────────────────────────────────────────────
+*.bak
+*.bak.*
+
+# ── OS ────────────────────────────────────────────────────────────────────────
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+
+# ── IDE ───────────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*.suo
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+*.log
+logs/
