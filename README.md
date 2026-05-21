@@ -6,7 +6,7 @@ Self-hosted, open-source passwordless authentication built on email OTP.
 No passwords. No third-party SaaS in your auth chain. Your data never leaves your environment.
 
 [![License: AGPL v3](https://img.shields.io/badge/License-AGPL%20v3-blue.svg)](LICENSE)
-[![ZAP Scan](https://img.shields.io/badge/ZAP-59%20PASS%20%7C%200%20FAIL%20%7C%208%20WARN-brightgreen)](zap-reports/)
+[![ZAP Scan](https://img.shields.io/badge/ZAP-62%20PASS%20%7C%200%20FAIL%20%7C%204%20WARN-brightgreen)](zap-reports/)
 [![Docker](https://img.shields.io/badge/docker-ready-blue)](https://hub.docker.com/r/omniapan/semelpass-oss-backend)
 
 ---
