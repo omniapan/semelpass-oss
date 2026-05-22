@@ -15,7 +15,7 @@ export default function System() {
   const [integrity, setIntegrity] = useState(null)
 
   useEffect(() => {
-    fetch('/admin/integrity')
+    fetch('/admin/api/integrity')
       .then(r => r.ok ? r.json() : null)
       .then(d => setIntegrity(d || { status: 'no_data' }))
       .catch(() => setIntegrity({ status: 'no_data' }))
